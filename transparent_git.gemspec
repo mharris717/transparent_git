@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
     "bin/remote_track",
     "lib/transparent_git.rb",
     "test/helper.rb",
+    "test/sample.txt",
     "test/sample.yaml",
     "test/test_transparent_git.rb",
     "transparent_git.gemspec"
