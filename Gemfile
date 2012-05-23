@@ -11,3 +11,7 @@ group :development do
   gem "jeweler", "~> 1.5.2"
   gem "rcov", ">= 0"
 end
+
+gem 'mharris_ext'
+gem 'yaml'
+gem 'fattr'

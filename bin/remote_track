@@ -1,0 +1,5 @@
+load File.dirname(__FILE__) + "/../lib/transparent_git.rb"
+f = ARGV[0]
+raise "no config file given" if f.to_s.strip == ''
+rt = RemoteTrackers.create_from_yaml(f)
+rt.run_loop!
