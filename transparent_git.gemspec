@@ -24,11 +24,13 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
+    "VERSION",
     "bin/remote_track",
     "lib/transparent_git.rb",
     "test/helper.rb",
     "test/sample.yaml",
-    "test/test_transparent_git.rb"
+    "test/test_transparent_git.rb",
+    "transparent_git.gemspec"
   ]
   s.homepage = %q{http://github.com/mharris717/transparent_git}
   s.licenses = ["MIT"]
