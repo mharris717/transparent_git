@@ -1,0 +1,2 @@
+c:/code/transparent_git
+c:/code/import_everything

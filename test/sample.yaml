@@ -2,5 +2,6 @@ repo_holding_dir: "c:/code/repo_holding"
 repos:
   - 
     working_dir: c:/code/transparent_git
+    name: transparent_git
   -
     working_dir: c:/code/import_everything
