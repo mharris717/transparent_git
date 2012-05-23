@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
@@ -31,7 +32,8 @@ Gem::Specification.new do |s|
     "test/sample.txt",
     "test/sample.yaml",
     "test/test_transparent_git.rb",
-    "transparent_git.gemspec"
+    "transparent_git.gemspec",
+    "vol/stuff.rb"
   ]
   s.homepage = %q{http://github.com/mharris717/transparent_git}
   s.licenses = ["MIT"]
