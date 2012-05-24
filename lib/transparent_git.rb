@@ -9,8 +9,9 @@ def git(*args)
     exe
   else
     str = args.join(" ")
-    res = ec "#{exe} #{str}"
-    raise res if res =~ /(error|fatal)/i
+    cmd = "#{exe} #{str}"
+    res = ec cmd
+    raise "cmd: #{cmd}\nres: #{res}" if res =~ /(error|fatal)/i || $?.exitstatus != 0
     res
   end
 end
@@ -51,19 +52,27 @@ class RemoteTracker
     FileTest.exist? "#{working_dir}/.git"
   end
   def repo_exists?
-    FileTest.exist? "#{repo_dir}/hooks"
+    FileTest.exist? "#{repo_dir}/config"
   end
 
   def setup_env!
-    ENV['GIT_DIR'] = "#{repo_dir}"
+    puts "setting env"
+    ENV['GIT_DIR'] = repo_dir
     ENV['GIT_WORK_TREE'] = working_dir
   end
   def create_repo!
     FileUtils.mkdir_p(repo_holding_dir)
     if working_dir_repo?
-      git :clone, working_dir.to_file_url,repo_dir,"--bare"
-      #git :branch, :transparent_git
-      git "checkout -b transparent_git"
+      git :clone, working_dir.to_file_url,repo_dir,"--mirror"
+      git :branch, :transparent_git
+
+      git :remote, :add, :tg_origin, working_dir.to_file_url
+      git :fetch, :tg_origin
+
+      #git :checkout, :master
+      #git "checkout transparent_git"
+
+      File.create("#{repo_dir}/HEAD","ref: refs/heads/transparent_git")
     else
       git :init
     end
@@ -87,7 +96,16 @@ class RemoteTracker
     git "add ."
     git "commit -m \"Current State #{Time.now}\""
 
-    git "branch -m master transparent_git" unless !existed
+    #git "branch -m master transparent_git" unless !existed
+
+    puts "wait"
+    STDIN.gets
+
+    #git "pull tg_origin master:master"
+    git "fetch tg_origin"
+    git "merge master tg_origin/master"
+
+    puts 'done'
   end
 end
 
