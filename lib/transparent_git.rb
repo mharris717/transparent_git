@@ -94,7 +94,7 @@ class RemoteTracker
 
     git "add -u"
     git "add ."
-    git "commit -m \"Current State #{Time.now}\""
+    eat_exceptions { git "commit -m \"Current State #{Time.now}\"" }
 
     #git "branch -m master transparent_git" unless !existed
 
