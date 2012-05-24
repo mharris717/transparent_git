@@ -3,7 +3,17 @@ require 'fileutils'
 require 'yaml'
 
 dir = "c:/code/tg_test_repo"
-def git; "c:/progra~1/git/bin/git"; end
+def git(*args)
+  exe = "c:/progra~1/git/bin/git"
+  if args.empty?
+    exe
+  else
+    str = args.join(" ")
+    res = ec "#{exe} #{str}"
+    raise res if res =~ /(error|fatal)/i
+    res
+  end
+end
 
 def with_chdir(dir)
   old = Dir.getwd
@@ -22,6 +32,13 @@ class Object
   end
 end
 
+class String
+  def to_file_url
+    res = gsub("\\","/").gsub("c:","/c")
+    "file://#{res}"
+  end
+end
+
 class RemoteTracker
   include FromHash
   attr_accessor :repo_holding_dir, :name, :working_dir
@@ -29,22 +46,48 @@ class RemoteTracker
   fattr(:name) do
     working_dir.gsub(/(:|\\|\/)/,"_")
   end
+
+  def working_dir_repo?
+    FileTest.exist? "#{working_dir}/.git"
+  end
+  def repo_exists?
+    FileTest.exist? "#{repo_dir}/hooks"
+  end
+
   def setup_env!
     ENV['GIT_DIR'] = "#{repo_dir}"
     ENV['GIT_WORK_TREE'] = working_dir
   end
-  def commit_current_state!
-    puts "doing #{working_dir}"
-    setup_env!
+  def create_repo!
     FileUtils.mkdir_p(repo_holding_dir)
+    if working_dir_repo?
+      git :clone, working_dir.to_file_url,repo_dir,"--bare"
+      #git :branch, :transparent_git
+      git "checkout -b transparent_git"
+    else
+      git :init
+    end
+  end
+
+  def setup_repo!
+    create_repo! unless repo_exists?
 
     lock = "#{repo_dir}/refs/heads/master.lock"
     FileUtils.rm(lock) if FileTest.exist?(lock)
+  end
+  def commit_current_state!
+    puts "doing #{working_dir}"
 
-    ec "#{git} init"
-    ec "#{git} add -u"
-    ec "#{git} add ."
-    ec "#{git} commit -m \"Current State #{Time.now}\""
+    existed = repo_exists?
+
+    setup_env!
+    setup_repo!
+
+    git "add -u"
+    git "add ."
+    git "commit -m \"Current State #{Time.now}\""
+
+    git "branch -m master transparent_git" unless !existed
   end
 end
 

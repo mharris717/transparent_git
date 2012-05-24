@@ -1,3 +1,4 @@
+load File.dirname(__FILE__) + "/../lib/transparent_git.rb"
 
 def test_junk
   ENV['GIT_DIR'] = "#{dir}/.gitx"
@@ -14,9 +15,14 @@ def test_junk
   end
 end
 
-rt = RemoteTracker.new(:repo_holding_dir => "c:/code/repo_holding", :working_dir => "c:/code/transparent_git")
-rt = RemoteTrackers.create_from_yaml("test/sample.yaml")
-rt.run_once!
+
+FileUtils.rm_r "c:/code/repo_holding/tg_test" if FileTest.exist? "c:/code/repo_holding/tg_test"
+rt = RemoteTracker.new(:repo_holding_dir => "c:/code/repo_holding", :working_dir => "c:/code/transparent_git", :name => "tg_test")
+
+rt.commit_current_state!
+git "checkout -b transparent_git2"
+#rt = RemoteTrackers.create_from_yaml("test/sample.yaml")
+#rt.commit_current_state!
 #loop do
 #  rt.commit_current_state!
 #  sleep(4)
