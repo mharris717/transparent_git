@@ -103,9 +103,9 @@ class RemoteTracker
 
     #git "pull tg_origin master:master"
     git "fetch tg_origin"
-    git "merge master tg_origin/master"
+    #git "merge master tg_origin/master"
 
-    puts 'done'
+    #puts 'done'
   end
 end
 
