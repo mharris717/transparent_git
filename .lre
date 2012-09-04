@@ -1,0 +1,19 @@
+load "lib/transparent_git.rb"
+load "lib/run_specs.rb"
+
+LRE.watch(".*spec/.*.rb") do |f|
+  run_specs!(f)
+end
+
+LRE.watch(".*lib/.*.rb") do |f|
+  load(f)
+  run_specs!(f)
+end
+
+LRE.watch(".*spec_helper.*") do |f|
+  load f
+end
+
+require 'repl_index'
+
+LRE.watch_dirs += ["C:\\Ruby192\\lib\\ruby\\gems\\1.9.1\\gems\\grit-2.5.0\\lib"]

@@ -15,12 +15,23 @@ def test_junk
   end
 end
 
+begin
 
-FileUtils.rm_r "c:/code/repo_holding/tg_test" if FileTest.exist? "c:/code/repo_holding/tg_test"
-rt = RemoteTracker.new(:repo_holding_dir => "c:/code/repo_holding", :working_dir => "c:/code/transparent_git", :name => "tg_test")
+  #FileUtils.rm_r "c:/code/repo_holding/tg_test" if FileTest.exist? "c:/code/repo_holding/tg_test"
+  
+  #rt = RemoteTracker.new(:repo_holding_dir => "c:/code/repo_holding", :working_dir => "c:/code/transparent_git", :name => "tg_test")
+  #rt.commit_current_state!
 
-rt.commit_current_state!
-git "checkout -b transparent_git2"
+  rt = RemoteTracker.new(:repo_holding_dir => "c:/code/repo_holding", :working_dir => "c:/code/transparent_git", :name => "tg_test")
+  rt.commit_current_state!
+
+rescue => exp
+  puts "ERROR"
+  puts exp.message #+ "\n" + exp.backtrace.join("\n")
+  puts "ERROR"
+end
+
+#git "checkout -b transparent_git2"
 #rt = RemoteTrackers.create_from_yaml("test/sample.yaml")
 #rt.commit_current_state!
 #loop do
